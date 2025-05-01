@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Tréninkové plány</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Moje tréninkové plány</h1>
+    <div class="user-info">
+      <span sec:authentication="name">Uživatel</span>
+      <form th:action="@{/perform_logout}" method="post">
+        <button type="submit" class="btn-logout">Odhlásit se</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="plan-list">
+    <h2>Vaše plány</h2>
+    <div th:if="${plans.empty}" class="no-plans">
+      <p>Zatím nemáte žádné tréninkové plány. Vytvořte svůj první plán!</p>
+    </div>
+    <div th:unless="${plans.empty}" class="plans">
+      <div th:each="plan : ${plans}" class="plan-item">
+        <h3 th:text="${plan.name}">Název plánu</h3>
+        <p th:text="${plan.description}">Popis plánu</p>
+        <a th:href="@{/plans/{id}(id=${plan.id})}" class="btn-details">Zobrazit detaily</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-plan">
+    <h2>Vytvořit nový plán</h2>
+    <form th:action="@{/plans}" method="post" th:object="${trainingPlan}">
+      <div class="form-group">
+        <label for="name">Název plánu:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Popis:</label>
+        <textarea id="description" th:field="*{description}" rows="4"></textarea>
+      </div>
+      <button type="submit" class="btn">Vytvořit plán</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

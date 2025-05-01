@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail tréninkového plánu</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1 th:text="${plan.name}">Název plánu</h1>
+    <nav>
+      <a th:href="@{/plans}" class="btn-back">Zpět na seznam plánů</a>
+    </nav>
+  </header>
+
+  <div class="plan-detail">
+    <p th:text="${plan.description}" class="plan-description">Popis plánu</p>
+
+    <div class="exercises">
+      <h2>Cvičení</h2>
+      <div th:if="${plan.exercises.empty}" class="no-exercises">
+        <p>Tento plán zatím neobsahuje žádná cvičení.</p>
+      </div>
+      <div th:unless="${plan.exercises.empty}" class="exercise-list">
+        <div th:each="exercise : ${plan.exercises}" class="exercise-item">
+          <h3 th:text="${exercise.name}">Název cvičení</h3>
+          <p th:text="${exercise.description}">Popis cvičení</p>
+          <div class="exercise-details">
+            <span th:if="${exercise.sets != null}" th:text="'Série: ' + ${exercise.sets}">Série: 3</span>
+            <span th:if="${exercise.reps != null}" th:text="'Opakování: ' + ${exercise.reps}">Opakování: 12</span>
+            <span th:if="${exercise.weight != null}" th:text="'Váha: ' + ${exercise.weight}">Váha: 50kg</span>
+          </div>
+          <form th:action="@{/exercises/{id}/delete(id=${exercise.id})}" method="post">
+            <input type="hidden" name="planId" th:value="${plan.id}" />
+            <button type="submit" class="btn-delete">Odstranit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-exercise">
+      <h2>Přidat nové cvičení</h2>
+      <form th:action="@{/exercises/{planId}(planId=${plan.id})}" method="post" th:object="${exercise}">
+        <div class="form-group">
+          <label for="name">Název cvičení:</label>
+          <input type="text" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Popis:</label>
+          <textarea id="description" th:field="*{description}" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="sets">Počet sérií:</label>
+            <input type="number" id="sets" th:field="*{sets}" min="1">
+          </div>
+          <div class="form-group half">
+            <label for="reps">Počet opakování:</label>
+            <input type="number" id="reps" th:field="*{reps}" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="weight">Váha (např. "50kg", "tělesná váha"):</label>
+          <input type="text" id="weight" th:field="*{weight}">
+        </div>
+        <button type="submit" class="btn">Přidat cvičení</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
