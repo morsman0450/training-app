@@ -19,9 +19,9 @@ public class TrainingSessionController {
     }
 
     @PostMapping("/{planId}")
-    public String addSessionToPlan(@PathVariable Long planId, @ModelAttribute TrainingSession newSession) {
+    public String addSessionToPlan(@PathVariable Long planId, @ModelAttribute TrainingSession trainingSession) {
         TrainingPlan plan = planService.getPlanById(planId);
-        sessionService.addSessionToPlan(newSession, plan);
+        sessionService.addSessionToPlan(trainingSession, plan);
         return "redirect:/plans/" + planId;
     }
 }

@@ -85,4 +85,6 @@ public class TrainingPlan {
         exercises.remove(exercise);
         exercise.setTrainingPlan(null);
     }
+
+
 }

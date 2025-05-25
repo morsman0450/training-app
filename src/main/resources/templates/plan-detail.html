@@ -68,6 +68,40 @@
       </form>
     </div>
   </div>
+  <h2>Přidat tréninkové sezení</h2>
+  <form th:action="@{/sessions/{planId}(planId=${plan.id})}" method="post" th:object="${newSession}">
+    <div class="form-group">
+      <label for="startTime">Začátek:</label>
+      <input type="datetime-local" id="startTime" th:field="*{startTime}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="endTime">Konec:</label>
+      <input type="datetime-local" id="endTime" th:field="*{endTime}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Poznámky:</label>
+      <textarea id="notes" th:field="*{notes}" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn">Přidat sezení</button>
+  </form>
+  <h3>Seznam tréninkových sezení</h3>
+  <div th:if="${sessions.empty}">
+    <p>Zatím žádné sezení.</p>
+  </div>
+  <ul th:each="trainingSession : ${sessions}">
+    <li>
+      <strong th:text="${#temporals.format(trainingSession.startTime, 'dd.MM.yyyy HH:mm')}">Začátek</strong>
+      –
+      <strong th:text="${#temporals.format(trainingSession.endTime, 'dd.MM.yyyy HH:mm')}">Konec</strong>
+      <br>
+      <span th:text="${trainingSession.notes}">Poznámky</span>
+    </li>
+  </ul>
+
+
 </div>
 </body>
 </html>
